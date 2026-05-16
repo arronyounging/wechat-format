@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>微信文章预览</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#f0f0f0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
+    .toolbar {
+      position:sticky; top:0; z-index:100;
+      background:#fff; border-bottom:1px solid #e5e5e5;
+      padding:12px 20px; display:flex; align-items:center;
+      justify-content:space-between; gap:12px;
+    }
+    .toolbar-left { display:flex; align-items:center; gap:12px; }
+    .toolbar h1 { font-size:15px; color:#333; font-weight:600; white-space:nowrap; }
+    .toolbar .stats { font-size:13px; color:#999; }
+    .toolbar-right { display:flex; align-items:center; gap:8px; }
+    .copy-btn {
+      background:#cf4436; color:#fff; border:none; padding:8px 20px;
+      border-radius:6px; font-size:14px; cursor:pointer; font-weight:500;
+      transition:background 0.2s;
+    }
+    .copy-btn:hover { background:#b83a2e; }
+    .copy-btn.success { background:#67c23a; }
+    .copy-btn.custyle { background:#7E45F2; }
+    .copy-btn.custyle:hover { background:#6B3AD9; }
+    .phone-frame {
+      width:375px; margin:20px auto; background:#fff;
+      border-radius:20px; box-shadow:0 4px 32px rgba(0,0,0,0.08);
+      overflow:hidden; padding:20px 0;
+      min-height:600px;
+    }
+    .article-content { padding:0; }
+    .theme-tag {
+      font-size:11px; color:#999; background:#f5f5f5;
+      padding:2px 8px; border-radius:4px;
+    }
+    @media (max-width: 420px) {
+      .phone-frame { width:100%; margin:0; border-radius:0; }
+      .toolbar { padding:10px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <h1>WeChat Preview</h1>
+      <span class="stats" id="stats"></span>
+      <span class="theme-tag" id="theme-tag"></span>
+    </div>
+    <div class="toolbar-right">
+      <button class="copy-btn" id="copyBtn" onclick="copyContent()">复制文章</button>
+    </div>
+  </div>
+  <div class="phone-frame">
+    <div class="article-content" id="article-content">
+      <!-- ARTICLE_CONTENT_PLACEHOLDER -->
+    </div>
+  </div>
+  <script>
+    // Stats
+    const contentEl = document.getElementById('article-content');
+    const text = contentEl.textContent;
+    const chars = text.replace(/\s/g,'').length;
+    const readMin = Math.ceil(chars / 300);
+    document.getElementById('stats').textContent = chars + ' 字 · 约 ' + readMin + ' 分钟';
+
+    // Copy
+    async function copyContent() {
+      const btn = document.getElementById('copyBtn');
+      try {
+        const html = contentEl.innerHTML;
+        const plainText = contentEl.textContent;
+        const htmlBlob = new Blob([html], { type: 'text/html' });
+        const textBlob = new Blob([plainText], { type: 'text/plain' });
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html': htmlBlob,
+            'text/plain': textBlob
+          })
+        ]);
+        btn.textContent = '已复制 ✓';
+        btn.classList.add('success');
+        setTimeout(() => {
+          btn.textContent = '复制文章';
+          btn.classList.remove('success');
+        }, 2000);
+      } catch(e) {
+        // Fallback: Selection API
+        const range = document.createRange();
+        range.selectNodeContents(contentEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+        btn.textContent = '已复制 ✓';
+        btn.classList.add('success');
+        setTimeout(() => {
+          btn.textContent = '复制文章';
+          btn.classList.remove('success');
+        }, 2000);
+      }
+    }
+  </script>
+</body>
+</html>
