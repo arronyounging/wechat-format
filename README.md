@@ -22,6 +22,7 @@ In Claude Code:
 ```
 /wechat-format article.md
 /wechat-format article.md --theme neondusk
+/wechat-format article.md --theme cosmiclavender
 ```
 
 This will:
@@ -41,11 +42,25 @@ Chapter cards use a Sunset Sweep gradient: Indigo -> Violet -> Rose -> Orange ->
 Cool tech-editorial palette. Deep indigo primary, coral accents.
 Chapter cards follow a sunset gradient from twilight to amber glow.
 
+### Cosmic Lavender (寰宇紫)
+
+Deep-thought editorial palette inspired by AI lab / VC research publications
+(海外独角兽, Stratechery, Anthropic blog). Signature lavender `#7973F7` accent
+on a neutral warm cream base. Built around **PingFang Light** typography at
+**line-height 2.0** — the airy, reads-like-a-book feel that signals "this is
+a serious cognitive piece." Includes 8 signature components: numbered section
+mark (giant 55px purple serial), vertical rail lead, thesis-sentence highlight,
+asymmetric quote box, cream hairline divider, purple pill+rule, lavender disc
+bullet, and Optima byline. Best for: company teardowns, science explainers,
+brand longform, AI research commentary.
+
 ### Custom
 
 Copy any theme JSON from `references/themes.md`, modify colors, save as `.json`, use with `--theme /path/to/theme.json`.
 
-## Components (20)
+## Components (28)
+
+### Universal (1–20)
 
 | Component | Markdown Trigger |
 |-----------|-----------------|
@@ -69,6 +84,21 @@ Copy any theme JSON from `references/themes.md`, modify colors, save as `.json`,
 | Divider | `---` |
 | Image | `![alt](src)` |
 | Author Card | `:::author` |
+
+### Cosmic Lavender signatures (21–28)
+
+These activate automatically when `theme: cosmiclavender`, or via explicit fences:
+
+| Component | Markdown Trigger |
+|-----------|-----------------|
+| Numbered Section Mark (55px purple serial) | `## heading` → auto `01.` `02.` ... |
+| Vertical Rail Lead | `:::lead` |
+| Thesis-Sentence Highlight | first sentence after `## H2`, or `:::thesis` |
+| Asymmetric Quote Box (purple left rail) | `> quote` or `:::quote` |
+| Cream Hairline Divider | `---` (overrides default) |
+| Purple Pill + Rule | `:::label TEXT` |
+| Lavender Disc Bullet | `- item` (overrides default) |
+| Optima Author Byline | `:::byline` |
 
 External links are auto-converted to footnotes (WeChat blocks non-WeChat URLs).
 

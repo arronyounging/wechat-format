@@ -1,6 +1,6 @@
 ---
 name: wechat-format
-version: "1.0.0"
+version: "1.1.0"
 description: >
   将 Markdown 文章转为微信公众号精美排版 HTML。支持多主题、章节卡片、
   高亮框、箭头列表、CSS 表格等 20 种组件。
@@ -8,7 +8,7 @@ description: >
   use when user says "排版公众号文章", "wechat format", "微信排版",
   "公众号排版", "format for wechat", "转微信格式"
 user-invokable: true
-argument-hint: "[markdown-file] [--theme inkstone|neondusk|custom]"
+argument-hint: "[markdown-file] [--theme inkstone|neondusk|cosmiclavender|custom]"
 metadata:
   author: ArroyYoung
   tags:
@@ -27,8 +27,8 @@ the WeChat Official Account editor.
 
 Before rendering, read these files for detailed specs:
 
-- `references/themes.md` — Two preset themes (Ink Stone, Neon Dusk) with full design token JSON
-- `references/components.md` — Complete HTML templates for all 20 components
+- `references/themes.md` — Three preset themes (Ink Stone, Neon Dusk, Cosmic Lavender) with full design token JSON. Pick based on article intent: Ink Stone for translations/essays, Neon Dusk for tech product launches, Cosmic Lavender for deep-thought analysis / company teardowns / science explainers / brand longform.
+- `references/components.md` — HTML templates for all components (#1–#20 universal + #21–#28 Cosmic Lavender signature)
 - `references/wechat-constraints.md` — WeChat rendering constraints and safe CSS properties
 
 ## Design Principles
@@ -60,8 +60,9 @@ source_url: https://...       # Optional — original link
 ---
 ```
 
-3. Load the theme from `references/themes.md`. If `theme` is a file path, read the custom JSON.
+3. Load the theme from `references/themes.md`. Theme names: `inkstone` (default), `neondusk`, `cosmiclavender`. If `theme` is a file path, read the custom JSON.
 4. If no frontmatter, use all defaults (theme: inkstone, no source block, no author card).
+5. If theme is `cosmiclavender`, also load the Cosmic Lavender signature components (#21–#28 in `components.md`) and apply the overrides in the Cosmic Lavender Assembly Cheat Sheet.
 
 ---
 
@@ -123,6 +124,13 @@ Apply the active theme's design tokens (colors, fonts, spacing) to every inline 
 :::important          — Highlight Box (alias)
 :::steps              — Arrow List (→ prefix items with bold title)
 :::author             — Author Card (name, account, bio)
+:::lead               — Vertical Rail Lead Paragraph (Cosmic Lavender — purple 6×75 left bar)
+:::quote              — Asymmetric Quote Box (Cosmic Lavender — purple left rail + slate sides)
+:::softbreak          — Cream Hairline Divider (Cosmic Lavender — warm 1px line)
+:::label TEXT         — Purple Pill + Rule, optional label (Cosmic Lavender — micro section opener)
+:::thesis             — Inline thesis-sentence highlight (Cosmic Lavender — purple 20% wash)
+:::byline             — Optima Author Byline at top of article (Cosmic Lavender)
+:::section NN         — Force a numbered section mark with serial NN (Cosmic Lavender)
 ```
 
 **Fence format:**
@@ -152,6 +160,14 @@ content lines...
 
 5. **Reading time** — Calculate `ceil(total_chinese_chars / 300)` and display as a caption
    line near the top: `约 X 分钟阅读`.
+
+6. **Cosmic Lavender auto-applies** (when active theme is `cosmiclavender`):
+   - Auto-number all `## H2` headings as `01.`, `02.`, ... rendered with #21 Numbered Section Mark
+   - Skip numbering for: `## TL;DR`, `## 目录`, `## 参考链接`, `## 关于作者`, `## 写在最后`
+   - Wrap the FIRST sentence of the FIRST paragraph after each `## H2` with #23 Thesis-Sentence Highlight
+   - Use #25 Cream Hairline Divider for all `---` (not the standard charcoal rule)
+   - Body font = `PingFangSC-light`, line-height = `2`, paragraphs separated by blank `<p><br></p>` not margin-bottom
+   - All H1/H2/H3 use PingFang **Light** (font-weight: 300 or absent + `<strong>` for bold) — hierarchy by SIZE not by weight
 
 ---
 

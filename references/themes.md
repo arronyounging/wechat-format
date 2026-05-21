@@ -149,9 +149,98 @@ gradient decomposition. Evokes: Stripe docs, Protocol magazine, Linear UI, Apple
 
 ---
 
+## Theme: Cosmic Lavender (寰宇紫) — Deep-Thought Editorial
+
+Premium long-form editorial palette inspired by AI lab / VC research publications
+(海外独角兽, Stratechery, Not Boring). Single signature lavender accent on a neutral
+warm cream + slate base. Built around **light-weight typography** (PingFang Light) at
+**generous line-height 2.0** — the airy, reads-like-a-book feel that signals "this is
+a serious cognitive piece." Evokes: Anthropic blog, Notion docs, Substack longform,
+academic preprints rebodied for mobile.
+
+```json
+{
+  "name": "寰宇紫 Cosmic Lavender",
+  "colors": {
+    "primary": "#7973F7",
+    "primaryLight": "rgba(163,140,239,0.20)",
+    "primaryBorder": "rgba(121,115,247,0.25)",
+    "secondary": "#1B47DC",
+    "text": "#2D2C2F",
+    "heading": "#000000",
+    "bold": "#000000",
+    "caption": "#7A7A7A",
+    "link": "#1B47DC",
+    "codeText": "#444444",
+    "codeBg": "#F5F5F5",
+    "divider": "#D4D4D4",
+    "softDivider": "#EFECE7",
+    "cardBorder": "#E8ECF0",
+    "pageBg": "#FFFFFF",
+    "surfaceHighlight": "rgba(163,140,239,0.20)",
+    "calloutWarning": "#A86820",
+    "calloutWarningBg": "rgba(168,104,32,0.08)",
+    "calloutSuccess": "#257A5C",
+    "calloutSuccessBg": "rgba(37,122,92,0.08)",
+    "chapterPalette": ["#7973F7", "#1B47DC", "#9D6BE5", "#5664DE", "#3D86E0"],
+    "chapterNames": ["Lavender 寰宇紫", "Electric 电光蓝", "Iris 鸢尾", "Periwinkle 长春花", "Azure 远空"]
+  },
+  "typography": {
+    "body": "PingFangSC-light,'PingFang SC','Noto Sans SC','Microsoft YaHei',-apple-system,sans-serif",
+    "heading": "PingFangSC-light,'PingFang SC','Noto Sans SC','Microsoft YaHei',-apple-system,sans-serif",
+    "english": "Optima-Regular,'Optima','PingFangTC-light','PingFang TC',Georgia,serif",
+    "code": "'JetBrains Mono','SF Mono',Menlo,Consolas,monospace",
+    "bodySize": "15px",
+    "bodyLineHeight": "2",
+    "bodyWeight": "300",
+    "boldWeight": "600",
+    "h1Size": "32px",
+    "h2Size": "32px",
+    "h3Size": "20px",
+    "captionSize": "13px",
+    "codeSize": "13.5px",
+    "chapterLabelSize": "55px",
+    "chapterTitleSize": "32px"
+  },
+  "spacing": {
+    "maxWidth": "640px",
+    "contentPadding": "16px",
+    "paragraphGap": "0px",
+    "paragraphBreakGap": "1em",
+    "headingMarginTop": "48px",
+    "headingMarginBottom": "24px",
+    "chapterPadding": "32px 16px 16px",
+    "calloutPadding": "16px 20px",
+    "highlightPadding": "16px 20px",
+    "borderRadius": "0px",
+    "smallRadius": "0px",
+    "codeRadius": "3px"
+  }
+}
+```
+
+### Cosmic Lavender Color Rationale
+- **Primary #7973F7** — Signature "信仰紫" (belief lavender). HSL(243, 88%, 71%). Bright but not saturated-cheap; reads as "thoughtful technology brand," not "consumer app." This is the article's identity color — used on every accent, every vertical rule, every serial number.
+- **First-line highlight rgba(163,140,239,0.20)** — A distinctive trick: the **opening sentence** of each section gets a translucent lavender wash behind the text (not a box, just a marker pen highlight). Signals "thesis sentence — read this carefully."
+- **Secondary #1B47DC** — Deep electric blue for secondary callouts and external links. Cooler/more authoritative than the lavender; balances it.
+- **Text #2D2C2F** — Near-black cool gray. Pairs with light-weight font for "ink on cream" feel.
+- **Soft divider #EFECE7** — Warm cream 1px hairlines. Used as sectioning instead of hard `---` lines; creates pages-of-a-book pacing.
+- **Card border #E8ECF0** — Cool pale slate. Used on three sides of the asymmetric quote box (the fourth side is the purple left rail).
+- **Code bg #F5F5F5** — Neutral light gray. Code is de-emphasized vs. body, opposite of dev-doc themes.
+
+### Cosmic Lavender Typographic Rules (load-bearing!)
+- **Use PingFang LIGHT (300) for body AND headings.** Differentiate hierarchy by SIZE not by WEIGHT. This is the soul of the style — heavier weights immediately make it look like a different (lesser) magazine.
+- **Body line-height: 2.0** (not 1.6, not 1.9 — full 2). Extreme breathing room is non-negotiable.
+- **Paragraphs separated by blank `<p><br></p>` lines, not margins.** Match the WeChat editor's native rhythm.
+- **Section serial number: 55px purple "01." → blank line → 32px Light Bold Title.** This two-line stamp is the visual centerpiece of every section.
+- **English/Latin text and author bylines: Optima Regular.** Optima's humanist proportions complement PingFang Light better than Helvetica/Inter would.
+- **No serif anywhere.** Unlike Ink Stone, this theme is fully sans — the "weight = light, size = large" hierarchy carries the editorial feel without serifs.
+
+---
+
 ## Custom Themes
 
-To create a custom theme, copy either theme JSON above and modify the color values.
+To create a custom theme, copy any theme JSON above and modify the color values.
 Save as a `.json` file and reference via `--theme /path/to/theme.json`.
 
 ### Design Guidelines for Custom Themes
@@ -161,3 +250,13 @@ Save as a `.json` file and reference via `--theme /path/to/theme.json`.
 4. All text colors must pass WCAG AA (4.5:1 contrast vs white)
 5. Background tints must use rgba() with opacity 0.03-0.08 for dark mode safety
 6. Functional colors (warning/success) should share the palette's undertone family
+
+---
+
+## Choosing a Theme
+
+| Theme | Best for | Personality |
+|-------|----------|-------------|
+| **Ink Stone 墨石** | Translations, philosophical essays, craft/design pieces, Anthropic-style content. | Warm, considered, hand-set print. |
+| **Neon Dusk 霓虹黄昏** | Product launches, dev tools, technical announcements, modern SaaS. | Cool, premium, Stripe/Linear. |
+| **Cosmic Lavender 寰宇紫** | Deep-thought analysis, company teardowns, science explainers, brand/product PR longform, AI research commentary. | Editorial, airy, "this is a serious cognitive piece." |
