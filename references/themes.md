@@ -196,7 +196,7 @@ academic preprints rebodied for mobile.
     "boldWeight": "600",
     "h1Size": "32px",
     "h2Size": "32px",
-    "h3Size": "20px",
+    "h3Size": "17px",
     "captionSize": "13px",
     "codeSize": "13.5px",
     "chapterLabelSize": "55px",
@@ -204,12 +204,12 @@ academic preprints rebodied for mobile.
   },
   "spacing": {
     "maxWidth": "640px",
-    "contentPadding": "16px",
+    "contentPadding": "8px",
     "paragraphGap": "0px",
     "paragraphBreakGap": "1em",
     "headingMarginTop": "48px",
     "headingMarginBottom": "24px",
-    "chapterPadding": "32px 16px 16px",
+    "chapterPadding": "32px 8px 16px",
     "calloutPadding": "16px 20px",
     "highlightPadding": "16px 20px",
     "borderRadius": "0px",
@@ -218,6 +218,12 @@ academic preprints rebodied for mobile.
   }
 }
 ```
+
+> **Long-form tip:** `contentPadding` was tightened from 16px → 8px in 2026-05.
+> The 16px default felt cramped on 375px-wide screens (only ~22 CJK chars/line);
+> 8px gains ~4 chars/line without losing breathing room. Box-internal padding
+> (`calloutPadding`, `highlightPadding`) stays at the original `16px 20px` so
+> highlight blocks still feel "set in" against the wider body text.
 
 ### Cosmic Lavender Color Rationale
 - **Primary #7973F7** — Signature "信仰紫" (belief lavender). HSL(243, 88%, 71%). Bright but not saturated-cheap; reads as "thoughtful technology brand," not "consumer app." This is the article's identity color — used on every accent, every vertical rule, every serial number.
@@ -235,6 +241,112 @@ academic preprints rebodied for mobile.
 - **Section serial number: 55px purple "01." → blank line → 32px Light Bold Title.** This two-line stamp is the visual centerpiece of every section.
 - **English/Latin text and author bylines: Optima Regular.** Optima's humanist proportions complement PingFang Light better than Helvetica/Inter would.
 - **No serif anywhere.** Unlike Ink Stone, this theme is fully sans — the "weight = light, size = large" hierarchy carries the editorial feel without serifs.
+
+---
+
+---
+
+## Theme: Pine Ink (松烟) — Literary Deep-Read Editorial
+
+Premium long-form palette inspired by Chinese literary essay magazines and the
+"Crossing 十字路口" school of deep-thought tech commentary. A single sage-green
+accent (`#407600`, the color of pine-soot ink stick) on a soft warm-gray base.
+Built around **0.1em letter-spacing on every element** — the slow, deliberate
+breathing room that signals "this is meant to be lingered over." Pairs Optima
+Latin with PingFang Light Chinese in a single shared stack — no separate
+heading font, no serif/sans split. Headings are differentiated by SIZE and the
+signature 8px green underline, not by font. Evokes: 十字路口Crossing, 苇草智库,
+《读库》, considered tech essays, philosophical product analysis.
+
+Sister theme to **Cosmic Lavender** — same "serious cognitive piece" register,
+opposite aesthetic. Where Cosmic Lavender is purple/AI-lab/dramatic-serial-numbers,
+Pine Ink is sage/literary-magazine/thick-underlined-chapter-marks.
+
+```json
+{
+  "name": "松烟 Pine Ink",
+  "colors": {
+    "primary": "#407600",
+    "primaryLight": "#F9FDF5",
+    "primaryBorder": "#407600",
+    "secondary": "#222222",
+    "text": "#3F3F3F",
+    "heading": "#407600",
+    "bold": "#222222",
+    "caption": "#888888",
+    "link": "#407600",
+    "codeText": "#3F3F3F",
+    "codeBg": "#F5F5F5",
+    "divider": "#E5E5E5",
+    "softDivider": "#F0F0F0",
+    "cardBorder": "#E5E5E5",
+    "pageBg": "#FFFFFF",
+    "surfaceHighlight": "#F5F5F5",
+    "asideBg": "#F9FDF5",
+    "asideBorder": "#407600",
+    "calloutWarning": "#9C6226",
+    "calloutWarningBg": "#FBF6EE",
+    "calloutSuccess": "#407600",
+    "calloutSuccessBg": "#F9FDF5",
+    "chapterPalette": ["#407600", "#407600", "#407600", "#407600", "#407600"],
+    "chapterNames": ["Pine 松针绿"]
+  },
+  "typography": {
+    "body": "'Optima-Regular','Optima','PingFangSC-light','PingFangTC-light','PingFang SC',Cambria,Cochin,Georgia,Times,'Times New Roman',serif",
+    "heading": "'Optima-Regular','Optima','PingFangSC-light','PingFangTC-light','PingFang SC',Cambria,Cochin,Georgia,Times,'Times New Roman',serif",
+    "english": "'Optima-Regular','Optima',Georgia,serif",
+    "code": "'JetBrains Mono','SF Mono',Menlo,Consolas,monospace",
+    "bodySize": "15px",
+    "bodyLineHeight": "1.75",
+    "bodyLineHeightPx": "26px",
+    "bodyWeight": "400",
+    "boldWeight": "600",
+    "letterSpacing": "0.1em",
+    "h1Size": "26px",
+    "h2Size": "24px",
+    "h3Size": "17px",
+    "captionSize": "12px",
+    "codeSize": "13.5px",
+    "chapterLabelSize": "12px",
+    "chapterTitleSize": "24px"
+  },
+  "spacing": {
+    "maxWidth": "640px",
+    "contentPadding": "16px",
+    "paragraphGap": "20px",
+    "headingMarginTop": "80px",
+    "headingMarginBottom": "40px",
+    "h3MarginTop": "40px",
+    "h3MarginBottom": "16px",
+    "chapterPadding": "0 1em",
+    "calloutPadding": "10px 16px",
+    "highlightPadding": "16px 20px",
+    "asidePadding": "16px 20px",
+    "borderRadius": "8px",
+    "imageRadius": "10px",
+    "smallRadius": "6px",
+    "codeRadius": "3px",
+    "chapterUnderlineWidth": "8px"
+  }
+}
+```
+
+### Pine Ink Color Rationale
+- **Primary #407600** — 松烟绿 / pine-soot ink. HSL(85°, 100%, 23%). Reads as "literati ink stick," not "tech mint." Deep enough to function as both accent AND heading color without losing readability against white (8.04:1 contrast). The single most important number in the palette.
+- **Aside background #F9FDF5** — Barely-there mint mist. So pale it's almost invisible — but when paired with the green border, creates a knowledge-box that feels "noted in the margin," not "alert popup."
+- **Surface highlight #F5F5F5** — Neutral cool gray. Used for the opener thesis block; pairs with the green left rail to create "manifesto stationery."
+- **Text #3F3F3F** — Soft warm gray (10.51:1 contrast). Avoids the harshness of pure black under 0.1em letter-spacing.
+- **Bold #222222** — Deep but not pure-black emphasis. Reserved for in-paragraph `**bold**`; the green is reserved for `***accent***` and headings.
+- **Caption #888888 / Footnote body #555555** — Two-tier muted gray for the footnote stack: index in `#222`, label in `#555`, URL in `#888`. Classic editorial footnote hierarchy.
+- **Single-color chapter palette** — Unlike Ink Stone / Neon Dusk / Cosmic Lavender (which cycle through 5 colors), Pine Ink uses ONE accent for ALL chapters. The visual rhythm comes from the 80px margin-top breathing room, not from color variety. This is deliberate restraint.
+
+### Pine Ink Typographic Rules (load-bearing!)
+- **`letter-spacing: 0.1em` on EVERY text element.** Body, headings, captions, code blocks, footnotes — everything. This is the signature breathing. Removing it kills the entire feel.
+- **One font stack for everything.** Optima Latin first, PingFang Light CJK second, Cambria/Cochin/Georgia serif fallback. No serif/sans split, no separate heading font. The hierarchy is carried entirely by SIZE + COLOR + the 8px green underline on chapter marks.
+- **Body line-height: 1.75 (or 26px literal).** Slightly tighter than Cosmic Lavender's 2.0 — this theme expects DENSER text (literary essays, not airy AI-lab posts). Use `26px` literal in inline styles when possible (it survives WeChat editor reflow better than relative ratios).
+- **Paragraph rhythm via `margin: 20px 0` not blank `<p><br></p>`.** Opposite of Cosmic Lavender. Pine Ink paragraphs are real `<p>` elements with real margin — gives the page a more "printed essay" feel than the WeChat-native blank-line rhythm.
+- **Chapter mark = the ONLY large heading.** 24px sage bold + `border-bottom: 8px solid #407600` + centered + `width: fit-content` + `margin: 80px auto 40px auto`. The 80px top margin is non-negotiable — it's what makes the article feel like turning a page in a book.
+- **No serial numbers, no marker-pen first-sentence highlights.** Unlike Cosmic Lavender, chapter marks are NOT numbered, and thesis sentences are NOT auto-highlighted. The restraint IS the style.
 
 ---
 
@@ -260,3 +372,4 @@ Save as a `.json` file and reference via `--theme /path/to/theme.json`.
 | **Ink Stone 墨石** | Translations, philosophical essays, craft/design pieces, Anthropic-style content. | Warm, considered, hand-set print. |
 | **Neon Dusk 霓虹黄昏** | Product launches, dev tools, technical announcements, modern SaaS. | Cool, premium, Stripe/Linear. |
 | **Cosmic Lavender 寰宇紫** | Deep-thought analysis, company teardowns, science explainers, brand/product PR longform, AI research commentary. | Editorial, airy, "this is a serious cognitive piece." |
+| **Pine Ink 松烟** | Literary tech essays, philosophical product analysis, multi-chapter deep-reads (8k+ chars), founder-letter longform, considered translations. | Slow, deliberate, "manuscript meant to be lingered over." |

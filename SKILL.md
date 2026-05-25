@@ -1,14 +1,14 @@
 ---
 name: wechat-format
-version: "1.1.0"
+version: "1.2.0"
 description: >
-  将 Markdown 文章转为微信公众号精美排版 HTML。支持多主题、章节卡片、
-  高亮框、箭头列表、CSS 表格等 20 种组件。
+  将 Markdown 文章转为微信公众号精美排版 HTML。支持 4 套主题（墨石/霓虹黄昏/
+  寰宇紫/松烟）、章节卡片、知识盒、立论开篇、高亮框、箭头列表、CSS 表格等 33 种组件。
   Convert Markdown articles to beautifully formatted WeChat-compatible HTML.
   use when user says "排版公众号文章", "wechat format", "微信排版",
   "公众号排版", "format for wechat", "转微信格式"
 user-invokable: true
-argument-hint: "[markdown-file] [--theme inkstone|neondusk|cosmiclavender|custom]"
+argument-hint: "[markdown-file] [--theme inkstone|neondusk|cosmiclavender|pineink|custom]"
 metadata:
   author: ArroyYoung
   tags:
@@ -27,8 +27,9 @@ the WeChat Official Account editor.
 
 Before rendering, read these files for detailed specs:
 
-- `references/themes.md` — Three preset themes (Ink Stone, Neon Dusk, Cosmic Lavender) with full design token JSON. Pick based on article intent: Ink Stone for translations/essays, Neon Dusk for tech product launches, Cosmic Lavender for deep-thought analysis / company teardowns / science explainers / brand longform.
-- `references/components.md` — HTML templates for all components (#1–#20 universal + #21–#28 Cosmic Lavender signature)
+- `references/themes.md` — Four preset themes (Ink Stone, Neon Dusk, Cosmic Lavender, Pine Ink) with full design token JSON. Pick based on article intent: Ink Stone for translations/essays, Neon Dusk for tech product launches, Cosmic Lavender for AI-lab style deep-thought analysis with dramatic serial numbers, Pine Ink for literary tech essays / 8k+ char philosophical longform / "Crossing 十字路口" school of deep commentary.
+- `references/components.md` — HTML templates for all components (#1–#20 universal + #21–#28 Cosmic Lavender signature + #29–#33 Pine Ink signature + #34–#36 Cosmic Lavender 2026-05 additions: Knowledge Aside / Core Thesis Box / Reading Card)
+- `scripts/cosmic_lavender_reference.py` — working reference implementation of the Cosmic Lavender renderer (parses markdown, applies all 2026-05 rules, writes HTML + preview). Consult when ambiguous about parse order, fence handling, or exact inline style strings. Not authoritative on visual spec — `themes.md` + `components.md` are. But canonical for parsing/output behavior.
 - `references/wechat-constraints.md` — WeChat rendering constraints and safe CSS properties
 
 ## Design Principles
@@ -60,9 +61,10 @@ source_url: https://...       # Optional — original link
 ---
 ```
 
-3. Load the theme from `references/themes.md`. Theme names: `inkstone` (default), `neondusk`, `cosmiclavender`. If `theme` is a file path, read the custom JSON.
+3. Load the theme from `references/themes.md`. Theme names: `inkstone` (default), `neondusk`, `cosmiclavender`, `pineink`. If `theme` is a file path, read the custom JSON.
 4. If no frontmatter, use all defaults (theme: inkstone, no source block, no author card).
 5. If theme is `cosmiclavender`, also load the Cosmic Lavender signature components (#21–#28 in `components.md`) and apply the overrides in the Cosmic Lavender Assembly Cheat Sheet.
+6. If theme is `pineink`, also load the Pine Ink signature components (#29–#33 in `components.md`) and apply the overrides in the Pine Ink Assembly Cheat Sheet.
 
 ---
 
@@ -129,8 +131,12 @@ Apply the active theme's design tokens (colors, fonts, spacing) to every inline 
 :::softbreak          — Cream Hairline Divider (Cosmic Lavender — warm 1px line)
 :::label TEXT         — Purple Pill + Rule, optional label (Cosmic Lavender — micro section opener)
 :::thesis             — Inline thesis-sentence highlight (Cosmic Lavender — purple 20% wash)
-:::byline             — Optima Author Byline at top of article (Cosmic Lavender)
+:::byline             — Optima Author Byline at top of article (Cosmic Lavender / Pine Ink)
 :::section NN         — Force a numbered section mark with serial NN (Cosmic Lavender)
+:::aside              — Knowledge Aside / "你知道吗" box (Pine Ink — green-bordered mint-mist box; Cosmic Lavender — #34 purple-bordered lavender-tinted box; first non-empty line = purple/green bold title; multi-paragraph body supported via blank lines; per-line breaks via `<br/>`)
+:::manifesto          — Pine Manifesto Opener (Pine Ink — gray bg + green left rail thesis block, max once per article)
+:::pine-chapter       — Force a Pine Chapter Heading explicitly (Pine Ink)
+:::reading TITLE      — Reading Recommendations (Cosmic Lavender #36 — card stack with cover image + title + lavender chevron; each card = 3 consecutive lines: image-url / title / article-url; blank line separates cards; optional TITLE renders Purple Pill + Rule header above stack)
 ```
 
 **Fence format:**
@@ -163,11 +169,38 @@ content lines...
 
 6. **Cosmic Lavender auto-applies** (when active theme is `cosmiclavender`):
    - Auto-number all `## H2` headings as `01.`, `02.`, ... rendered with #21 Numbered Section Mark
-   - Skip numbering for: `## TL;DR`, `## 目录`, `## 参考链接`, `## 关于作者`, `## 写在最后`
-   - Wrap the FIRST sentence of the FIRST paragraph after each `## H2` with #23 Thesis-Sentence Highlight
+   - Skip numbering for: `## TL;DR`, `## 目录`, `## 参考链接`, `## 关于作者`, `## 写在最后`, `## 先说结论`. If H2 starts with `结语` or `结语：`, render with #26 Purple Pill + Rule using label "EPILOGUE" instead of a number.
+   - Wrap the FIRST sentence of the FIRST paragraph after each `## H2` with #23 Thesis-Sentence Highlight (skip if that paragraph is entirely bold — see Core Thesis Box rule below)
    - Use #25 Cream Hairline Divider for all `---` (not the standard charcoal rule)
+   - **DO NOT** auto-emit a divider before each `## H2`. The markdown's explicit `---` between sections is the source of truth — auto-emitting a second divider stacks visible double lines. Trust the markdown.
+   - **`**整段全粗**` (whole-paragraph bold)** → auto-renders as #35 Cosmic Lavender Core Thesis Box (rounded lavender container, bold body in BLACK #000; matches #34 aside visually, sans the title row).
+   - **Inline `**bold**` in body** → renders in theme PURPLE `#7973F7` (low-cost highlighter). Exceptions: bold inside any already-lavender container (#34 aside body, #35 thesis box, #24 quote box) stays BLACK `#000` to preserve hierarchy.
+   - **`## H2` body padding** = `0 8px` (tightened from 16px in 2026-05 for long-form readability — gains ~4 CJK chars per line on 375px screens). Box-internal padding (asides, callouts) stays at the original `14-16px / 16-22px` so internal content still feels "set in".
+   - **`### H3` size** = `17px` (tightened from 20-22px in 2026-05 for clearer H2/H3 subordination). Margin = `24px auto 12px`, line-height = `1.6`.
+   - **`### H3` with `:::label X` pill** (e.g. L0–L5 layer headers, company subsections) → renders as **single-row inline pattern**: `[6px×20px purple pill] [optional Optima label] [17px title]`. NO trailing horizontal rule. The old two-row "pill+rule / title-below" pattern produces a "broken divider" visual when no label fills the gap.
+   - **`:::aside`** → renders #34 Cosmic Lavender Knowledge Aside (purple-bordered, `#FAF8FF` background, 8px radius, 14px/16px padding). First non-empty line = purple bold title; remaining lines = body. Multi-paragraph supported: each markdown line becomes a rendered line separated by `<br/>`; blank lines add `<br/><br/>` paragraph spacing. No max-line cap (long asides are first-class).
+   - **`:::reading`** → renders #36 Cosmic Lavender Reading Card stack. See fence spec above.
+   - **`---` (cream divider) preceding H2** — render normally; the H2 itself adds no extra divider.
    - Body font = `PingFangSC-light`, line-height = `2`, paragraphs separated by blank `<p><br></p>` not margin-bottom
    - All H1/H2/H3 use PingFang **Light** (font-weight: 300 or absent + `<strong>` for bold) — hierarchy by SIZE not by weight
+
+7. **Pine Ink auto-applies** (when active theme is `pineink`):
+   - Render ALL `## H2` headings as #29 Pine Chapter Heading (centered, 24px sage `#407600` bold, 8px green underline, `width:fit-content`, `margin:80px auto 40px auto`). First chapter in the article: reduce top margin to `40px`.
+   - Render all `### H3` as 17px sage `#407600` bold (NOT centered, NO underline) with `margin:40px 0 16px` — keeps the underline mark exclusive to chapter-level
+   - If the FIRST `> blockquote` appears BEFORE the first `## H2`, render it as #30 Pine Manifesto Opener (auto-elevation). Subsequent `> blockquote` render as standard #11 Callout with sage colors (border-left `3px solid #407600`, bg `#F5F5F5`).
+   - `:::aside` blocks → #31 Knowledge Aside (first non-empty line becomes green bold title; remaining lines = body; separate body paragraphs with inline `<br/><br/>`, NOT separate `<p>` blocks)
+   - `:::byline` → #32 Pine Author Byline (right-aligned, single Optima/PingFang stack, padding-bottom 1em)
+   - Footnotes → #33 Pine Footnote (three-tier gray: `#222` index, `#555` label, `#888` URL, 12px / 1.7)
+   - **`letter-spacing: 0.1em` on EVERY text element.** Body, headings, captions, code, footnotes, asides — without exception. Only `<sup>` footnote markers use `letter-spacing:0` (keeps `[1]` tight).
+   - Body font stack = single shared `Optima → PingFang Light → serif fallback` (no separate heading font, no serif/sans split)
+   - Body line-height = `26px` literal (NOT `1.75` relative) inside boxes/blocks; `1.75` is fine on the outer wrapper
+   - Paragraphs separated by real `margin: 20px 0`, NOT blank `<p><br></p>` (opposite of Cosmic Lavender)
+   - Text-align = `left` everywhere (NOT `justify` — reads more like a printed manuscript)
+   - `**bold**` color = `#222222` (NOT sage — sage is reserved for headings, `***accent***`, manifesto opener, aside titles only)
+   - `***accent***` color = `#407600` (sage)
+   - Image `border-radius` = `10px` (NOT default 6px)
+   - DO NOT auto-emit: TOC, numbered serial marks, first-sentence marker highlights, chapter color rotation
+   - `:::chapter` fence is downgraded to #29 Pine Chapter Heading (uses the chapter's main title text only — Pine Ink doesn't have colored chapter cards)
 
 ---
 

@@ -23,6 +23,7 @@ In Claude Code:
 /wechat-format article.md
 /wechat-format article.md --theme neondusk
 /wechat-format article.md --theme cosmiclavender
+/wechat-format article.md --theme pineink
 ```
 
 This will:
@@ -54,11 +55,26 @@ asymmetric quote box, cream hairline divider, purple pill+rule, lavender disc
 bullet, and Optima byline. Best for: company teardowns, science explainers,
 brand longform, AI research commentary.
 
+### Pine Ink (松烟)
+
+Literary deep-read editorial palette inspired by the "Crossing 十字路口" school of
+considered tech commentary. Single sage-green `#407600` accent (the color of
+pine-soot ink stick) on warm gray. Built around **0.1em letter-spacing on every
+element** — the slow, deliberate breathing room that signals "this is meant to be
+lingered over." Pairs Optima Latin with PingFang Light Chinese in a single shared
+stack — no separate heading font. Includes 5 signature components: pine chapter
+heading (8px sage underline with 80px breathing room), pine manifesto opener
+(gray bg + green left rail thesis), knowledge aside ("你知道吗" mint-mist box),
+pine author byline, pine footnote. Best for: literary tech essays, philosophical
+product analysis, multi-chapter deep-reads (8k+ chars), founder-letter longform,
+considered translations. Sister theme to Cosmic Lavender — same "serious cognitive
+piece" register, opposite aesthetic.
+
 ### Custom
 
 Copy any theme JSON from `references/themes.md`, modify colors, save as `.json`, use with `--theme /path/to/theme.json`.
 
-## Components (28)
+## Components (36)
 
 ### Universal (1–20)
 
@@ -85,7 +101,19 @@ Copy any theme JSON from `references/themes.md`, modify colors, save as `.json`,
 | Image | `![alt](src)` |
 | Author Card | `:::author` |
 
-### Cosmic Lavender signatures (21–28)
+### Pine Ink signatures (29–33)
+
+These activate automatically when `theme: pineink`, or via explicit fences:
+
+| Component | Markdown Trigger |
+|-----------|-----------------|
+| Pine Chapter Heading (sage + 8px underline + 80px breathing) | `## heading` → centered green title |
+| Pine Manifesto Opener (gray bg + green left rail thesis) | First `> blockquote` before `## H2`, or `:::manifesto` |
+| Knowledge Aside / "你知道吗" Box | `:::aside` (first line = green bold title) |
+| Pine Author Byline (right-aligned, single Optima stack) | `:::byline` |
+| Pine Footnote (three-tier gray editorial) | auto |
+
+### Cosmic Lavender signatures (21–28, 34–36)
 
 These activate automatically when `theme: cosmiclavender`, or via explicit fences:
 
@@ -94,11 +122,16 @@ These activate automatically when `theme: cosmiclavender`, or via explicit fence
 | Numbered Section Mark (55px purple serial) | `## heading` → auto `01.` `02.` ... |
 | Vertical Rail Lead | `:::lead` |
 | Thesis-Sentence Highlight | first sentence after `## H2`, or `:::thesis` |
-| Asymmetric Quote Box (purple left rail) | `> quote` or `:::quote` |
+| Asymmetric Quote Box (purple left rail + slate 3 sides) | `> quote` or `:::quote` |
 | Cream Hairline Divider | `---` (overrides default) |
-| Purple Pill + Rule | `:::label TEXT` |
+| Purple Pill + Rule (incl. **H3 inline pill** variant) | `:::label TEXT` / `### H3` w/ pill |
 | Lavender Disc Bullet | `- item` (overrides default) |
 | Optima Author Byline | `:::byline` |
+| **Knowledge Aside** ("你知道吗" 紫框淡紫底, multi-paragraph) | `:::aside` |
+| **Core Thesis Box** (rounded lavender container, black bold body) | `**整段全粗**` (whole-paragraph bold) |
+| **Reading Card** (WeChat-style image + title + chevron stack) | `:::reading TITLE` |
+
+**Inline bold color rule** — `**xxx**` in body text renders in theme purple `#7973F7`; inside any lavender container (#34 aside body, #35 thesis box, #24 quote box), bold stays black `#000` to preserve hierarchy.
 
 External links are auto-converted to footnotes (WeChat blocks non-WeChat URLs).
 
